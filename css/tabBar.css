@@ -115,6 +115,9 @@ body.linux #menu-button {
 .tab-item.active {
   min-width: 168px;
 }
+.tab-item.active:hover { /* Makes it more intuitive for user that the tab is not clickable */
+  cursor: text;
+}
 .tab-item.gu-mirror {
   top: var(--control-space-top) !important;
   height: 32px !important;
@@ -161,6 +164,7 @@ body.linux #menu-button {
 
 .tab-item:not(.active):hover {
   background-color: rgba(0, 0, 0, 0.03);
+  cursor: pointer; /* Cursor is set to pointer for tabs that are not currently active */
 }
 .dark-theme .tab-item:not(.active):hover {
   background-color: rgba(255, 255, 255, 0.1);
