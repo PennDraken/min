@@ -114,6 +114,8 @@ body.linux #menu-button {
 }
 .tab-item.active {
   min-width: 168px;
+  /* border-bottom: solid white 1px; /* Uncomment to underline selected tab */
+  border-radius: 8px; /* Makes it clearer which tab is active */
 }
 .tab-item.active:hover { /* Makes it more intuitive for user that the tab is not clickable */
   cursor: text;
