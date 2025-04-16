@@ -51,6 +51,17 @@ const tabBar = {
 
     tabEl.appendChild(readerView.getButton(data.id))
     tabEl.appendChild(tabAudio.getButton(data.id))
+    if (data.favicon) {
+      var favicon = document.createElement('img')
+      favicon.className = 'favicon'
+      if (data.favicon) {
+        favicon.src = data.favicon.url
+      } else {
+        favicon.src = data.favicon.url
+      }
+      
+      tabEl.appendChild(favicon)
+    }
     tabEl.appendChild(progressBar.create())
 
     // icons
@@ -62,12 +73,6 @@ const tabBar = {
       var pbIcon = document.createElement('i')
       pbIcon.className = 'icon-tab-is-private tab-icon tab-info-icon i carbon:view-off'
       iconArea.appendChild(pbIcon)
-    }
-    if (data.favicon) {
-      var favicon = document.createElement('img')
-      favicon.className = 'favicon'
-      favicon.src = data.favicon.url
-      iconArea.appendChild(favicon)
     }
 
     var closeTabButton = document.createElement('button')
@@ -184,6 +189,20 @@ const tabBar = {
     var audioButton = tabEl.querySelector('.tab-audio-button')
     tabAudio.updateButton(tabId, audioButton)
 
+    if (tabData.favicon) {
+      // 2 scenarios, either favicon was already loaded or it was not loaded
+      var favicon = tabEl.getElementsByClassName('favicon')[0]
+      if (favicon) {
+        favicon.src = tabData.favicon.url
+      } else {
+        var favicon = document.createElement('img')
+        favicon.className = 'favicon'
+        favicon.src = tabData.favicon.url
+        audioButton.before(favicon)
+      }
+    }
+
+
     tabEl.querySelectorAll('.permission-request-icon').forEach(el => el.remove())
 
     permissionRequests.getButtons(tabId).reverse().forEach(function (button) {
@@ -201,14 +220,6 @@ const tabBar = {
       insecureIcon.title = l('connectionNotSecure')
       iconArea.appendChild(insecureIcon)
     }
-    
-    console.log(tabData)
-    if (tabData.favicon) {
-      var favicon = tabEl.getElementsByClassName('favicon')[0]
-      favicon.src = tabData.favicon.url
-      // iconArea.appendChild(favicon)
-    }
-
   },
   updateAll: function () {
     empty(tabBar.containerInner)
@@ -304,7 +315,7 @@ webviews.bindEvent('did-stop-loading', function (tabId) {
 })
 
 tasks.on('tab-updated', function (id, key) {
-  var updateKeys = ['title', 'secure', 'url', 'muted', 'hasAudio']
+  var updateKeys = ['title', 'secure', 'url', 'muted', 'hasAudio', 'favicon']
   if (updateKeys.includes(key)) {
     tabBar.updateTab(id)
   }

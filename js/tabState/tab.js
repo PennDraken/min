@@ -29,7 +29,7 @@ class TabList {
       previewImage: '',
       isFileView: false,
       hasWebContents: false,
-      favicon: null
+      favicon: tab.favicon || null
     }
 
     if (options.atEnd) {
