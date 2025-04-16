@@ -198,6 +198,11 @@ body:not(.touch)
   align-items: center;
   height: 100%;
 }
+
+.favicon {
+  width: 16px;
+  height: 16px;
+}
 .tab-item .tab-icon:not(.permission-request-icon):hover:after {
   content: "";
   width: 24px;

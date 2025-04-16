@@ -63,6 +63,12 @@ const tabBar = {
       pbIcon.className = 'icon-tab-is-private tab-icon tab-info-icon i carbon:view-off'
       iconArea.appendChild(pbIcon)
     }
+    if (data.favicon) {
+      var favicon = document.createElement('img')
+      favicon.className = 'favicon'
+      favicon.src = data.favicon.url
+      iconArea.appendChild(favicon)
+    }
 
     var closeTabButton = document.createElement('button')
     closeTabButton.className = 'tab-icon tab-close-button i carbon:close'
@@ -195,6 +201,14 @@ const tabBar = {
       insecureIcon.title = l('connectionNotSecure')
       iconArea.appendChild(insecureIcon)
     }
+    
+    console.log(tabData)
+    if (tabData.favicon) {
+      var favicon = tabEl.getElementsByClassName('favicon')[0]
+      favicon.src = tabData.favicon.url
+      // iconArea.appendChild(favicon)
+    }
+
   },
   updateAll: function () {
     empty(tabBar.containerInner)
