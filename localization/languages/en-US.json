@@ -159,6 +159,7 @@
     "settingsDarkModeAlways": "Always",
     "settingsDarkModeSystem": "Follow system theme",
     "settingsSiteThemeToggle": "Enable site theme",
+    "settingsShowFaviconTabsToggle": "Show favicons in tabs",
     "settingsAdditionalFeaturesHeading": "Additional Features",
     "settingsUserscriptsToggle": "Enable user scripts",
     "settingsShowDividerToggle": "Show divider between tabs",

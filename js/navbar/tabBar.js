@@ -262,6 +262,14 @@ const tabBar = {
       tabBar.navBar.classList.remove('show-dividers')
     }
   },
+  handleFaviconPreference: function (faviconPreference) {
+    console.log('faviconPreference', faviconPreference) 
+    if (faviconPreference === true) {
+      tabBar.navBar.classList.add('show-favicons')
+    } else {
+      tabBar.navBar.classList.remove('show-favicons')
+    }
+  },
   initializeTabDragging: function () {
     tabBar.dragulaInstance = dragula([document.getElementById('tabs-inner')], {
       direction: 'horizontal',
@@ -300,6 +308,10 @@ window.addEventListener('resize', tabBar.handleSizeChange)
 
 settings.listen('showDividerBetweenTabs', function (dividerPreference) {
   tabBar.handleDividerPreference(dividerPreference)
+})
+
+settings.listen('showFaviconInTabs', function (showFaviconTabPreference) {
+  tabBar.handleFaviconPreference(showFaviconTabPreference)
 })
 
 /* tab loading and progress bar status */
