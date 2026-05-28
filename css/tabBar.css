@@ -114,6 +114,11 @@ body.linux #menu-button {
 }
 .tab-item.active {
   min-width: 168px;
+  /* border-bottom: solid white 1px; /* Uncomment to underline selected tab */
+  border-radius: 8px; /* Makes it clearer which tab is active */
+}
+.tab-item.active:hover { /* Makes it more intuitive for user that the tab is not clickable */
+  cursor: text;
 }
 .tab-item.gu-mirror {
   top: var(--control-space-top) !important;
@@ -161,6 +166,7 @@ body.linux #menu-button {
 
 .tab-item:not(.active):hover {
   background-color: rgba(0, 0, 0, 0.03);
+  cursor: pointer; /* Cursor is set to pointer for tabs that are not currently active */
 }
 .dark-theme .tab-item:not(.active):hover {
   background-color: rgba(255, 255, 255, 0.1);
@@ -192,6 +198,21 @@ body:not(.touch)
   align-items: center;
   height: 100%;
 }
+
+.favicon {
+  display: none;
+}
+
+#navbar.show-favicons .favicon {
+  display: revert;
+  width: 16px;
+  height: 16px;
+  margin: auto 0;
+  vertical-align: text-bottom;
+  padding: 0;
+  font-size: 1.1em !important;
+}
+
 .tab-item .tab-icon:not(.permission-request-icon):hover:after {
   content: "";
   width: 24px;
