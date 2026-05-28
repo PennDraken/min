@@ -52,6 +52,17 @@ const tabBar = {
 
     tabEl.appendChild(readerView.getButton(data.id))
     tabEl.appendChild(tabAudio.getButton(data.id))
+    if (data.favicon) {
+      var favicon = document.createElement('img')
+      favicon.className = 'favicon'
+      if (data.favicon) {
+        favicon.src = data.favicon.url
+      } else {
+        favicon.src = data.favicon.url
+      }
+      
+      tabEl.appendChild(favicon)
+    }
     tabEl.appendChild(progressBar.create())
 
     // icons

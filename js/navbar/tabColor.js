@@ -432,7 +432,7 @@ const tabColor = {
             textColor: getTextColor(backgroundColorAdjusted),
             isLowContrast: isLowContrast(backgroundColorAdjusted)
           },
-          favicon: {
+          favicon: { /* Tab favicon is set here */
             url: favicons[0],
             luminance: getLuminance(backgroundColor)
           }
