@@ -39,7 +39,7 @@
 
     <button id="linux-control-buttons" class="theme-text-color">
       <svg
-        width="74"
+        width="0"
         height="24"
         version="1.1"
         fill="none"
@@ -48,6 +48,7 @@
         stroke-miterlimit="10"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns="http://www.w3.org/2000/svg"
+        display="none"
       >
         <g id="minimize-button">
           <rect width="24" height="24" fill="transparent"></rect>
@@ -121,18 +122,24 @@
         tabindex="-1"
       ></button>
       <div id="toolbar-navigation-buttons" hidden>
-          <button
+        <button
           id="back-button"
           class="navbar-action-button i carbon:chevron-left"
           data-label="goBack"
           tabindex="-1"
         ></button>
         <button
-        id="forward-button"
-        class="navbar-action-button i carbon:chevron-right"
-        data-label="goForward"
-        tabindex="-1"
-      ></button>
+          id="forward-button"
+          class="navbar-action-button i carbon:chevron-right"
+          data-label="goForward"
+          tabindex="-1"
+        ></button>
+      </div>
+      <div
+        id="url-panel">
+        <div id="url-panel-text">
+          www.google.com
+        </div>
       </div>
       <div id="tabs">
         <div id="tab-editor" hidden>
