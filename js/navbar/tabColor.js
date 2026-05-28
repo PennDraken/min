@@ -153,9 +153,172 @@ function getLuminance (c) {
   return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
 }
 
+async function transformFavicon(url) {
+  // Load image
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = url;
+  await img.decode();
+
+  // Canvas setup
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  // Draw original
+  ctx.drawImage(img, 0, 0);
+
+  // Get pixel data
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+
+  // Modify pixels
+  for (let i = 0; i < data.length; i += 4) {
+    const R = data[i];
+    const G = data[i + 1];
+    const B = data[i + 2];
+
+    // Detect grayscale (R≈G≈B)
+    if (Math.abs(R - G) < 3 && Math.abs(G - B) < 3) {
+      // Compute brightness Y
+      const Y = 0.299 * R + 0.587 * G + 0.114 * B;
+      const Y2 = 255 - Y; // invert brightness
+
+      data[i] = data[i + 1] = data[i + 2] = Y2;
+    }
+  }
+
+  // Commit changes
+  ctx.putImageData(imageData, 0, 0);
+
+  // Return URL string (PNG data URL)
+  return canvas.toDataURL("image/png");
+}
+
+async function transformFaviconProminent(url, threshold = 50) {
+  // Load image
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.src = url;
+  await img.decode();
+
+  // Canvas setup
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  // Draw original
+  ctx.drawImage(img, 0, 0);
+
+  // Get pixel data
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const data = imageData.data;
+
+  // Build color histogram, skip fully transparent pixels
+  const colorCounts = [];
+  for (let i = 0; i < data.length; i += 4) {
+    const R = data[i];
+    const G = data[i + 1];
+    const B = data[i + 2];
+    const A = data[i + 3];
+
+    if (A === 0) continue; // skip transparent pixels
+
+    let found = false;
+    for (const c of colorCounts) {
+      if (
+        Math.abs(c.R - R) <= threshold &&
+        Math.abs(c.G - G) <= threshold &&
+        Math.abs(c.B - B) <= threshold
+      ) {
+        c.count++;
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      colorCounts.push({ R, G, B, count: 1 });
+    }
+  }
+
+  // Find the most prominent color
+  if (colorCounts.length === 0) return url; // fallback if all transparent
+  colorCounts.sort((a, b) => b.count - a.count);
+  const mainColor = colorCounts[0];
+
+  // Replace pixels
+  for (let i = 0; i < data.length; i += 4) {
+    const R = data[i];
+    const G = data[i + 1];
+    const B = data[i + 2];
+    const A = data[i + 3];
+
+    if (A === 0) continue; // leave transparent pixels as-is
+
+    const distance =
+      Math.abs(R - mainColor.R) +
+      Math.abs(G - mainColor.G) +
+      Math.abs(B - mainColor.B);
+
+    if (distance <= threshold * 3) {
+      // Keep main color
+      // data[i] = mainColor.R;
+      // data[i + 1] = mainColor.G;
+      // data[i + 2] = mainColor.B;
+      // data[i + 3] = 255;
+      data[i + 0] = 0;
+      data[i + 1] = 0;
+      data[i + 2] = 0;
+      data[i + 3] = 255;
+    } else {
+      // Make other pixels transparent
+      data[i + 3] = 0;
+    }
+  }
+
+  // Commit changes
+  ctx.putImageData(imageData, 0, 0);
+
+  // Return URL string (PNG data URL)
+  return canvas.toDataURL("image/png");
+}
+
 function setColor (bg, fg, isLowContrast) {
   document.body.style.setProperty('--theme-background-color', bg)
   document.body.style.setProperty('--theme-foreground-color', fg)
+
+  const bgLuminosity = getLuminance( getColorFromString(bg) )
+  const fgLuminosity = getLuminance( getColorFromString(fg) )
+
+  console.log("BG luminosity", bgLuminosity)
+  for (const tab of tabs.tabs) {
+    if (tab === tabs.getSelected()) continue
+    if (!tab.backgroundColor || !tab.favicon) continue
+
+    // find the DOM element for this tab
+    const tabElement = document.querySelector(
+      `.tab-item[data-tab="${tab.id}"]`
+    );
+    if (!tabElement) continue
+    console.log(tabElement)
+
+    const faviconEl = tabElement.querySelector('.favicon')
+    if (!faviconEl) continue
+    console.log(faviconEl)
+
+    transformFaviconProminent(tab.favicon.url).then(newUrl => {
+      // Assign the new URL once processed
+      faviconEl.src = newUrl;
+
+      faviconEl.classList.remove('invert')
+      if (fgLuminosity > 128) {
+        faviconEl.classList.add('invert')
+      }
+    });
+  }
 
   const backgroundElements = document.getElementsByClassName('theme-background-color')
   const textElements = document.getElementsByClassName('theme-text-color')

@@ -42,6 +42,7 @@ const tabBar = {
     requestAnimationFrame(function () {
       el.scrollIntoView()
     })
+    this.updateTab(tabId)
   },
   createTab: function (data) {
     var tabEl = document.createElement('div')
@@ -178,6 +179,25 @@ const tabBar = {
     var audioButton = tabEl.querySelector('.tab-audio-button')
     tabAudio.updateButton(tabId, audioButton)
 
+    if (tabData.favicon) {
+      // 2 scenarios, either favicon was already loaded or it was not loaded
+      var favicon = tabEl.getElementsByClassName('favicon')[0]
+      if (favicon) {
+        favicon.src = tabData.favicon.url
+      } else {
+        var favicon = document.createElement('img')
+        favicon.className = 'favicon'
+        favicon.src = tabData.favicon.url
+        audioButton.before(favicon)
+      }
+
+      // Calculate contrast
+      // Calculate contrast manually using favicon pixels
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = tabData.favicon.url;
+    }
+
     tabEl.querySelectorAll('.permission-request-icon').forEach(el => el.remove())
 
     permissionRequests.getButtons(tabId).reverse().forEach(function (button) {
@@ -237,6 +257,14 @@ const tabBar = {
       tabBar.navBar.classList.remove('show-dividers')
     }
   },
+  handleFaviconPreference: function (faviconPreference) {
+    console.log('faviconPreference', faviconPreference) 
+    if (faviconPreference === true) {
+      tabBar.navBar.classList.add('show-favicons')
+    } else {
+      tabBar.navBar.classList.remove('show-favicons')
+    }
+  },
   initializeTabDragging: function () {
     tabBar.dragulaInstance = dragula([document.getElementById('tabs-inner')], {
       direction: 'horizontal',
@@ -277,6 +305,10 @@ settings.listen('showDividerBetweenTabs', function (dividerPreference) {
   tabBar.handleDividerPreference(dividerPreference)
 })
 
+settings.listen('showFaviconInTabs', function (showFaviconTabPreference) {
+  tabBar.handleFaviconPreference(showFaviconTabPreference)
+})
+
 /* tab loading and progress bar status */
 webviews.bindEvent('did-start-loading', function (tabId) {
   progressBar.update(tabBar.getTab(tabId).querySelector('.progress-bar'), 'start')
@@ -290,7 +322,7 @@ webviews.bindEvent('did-stop-loading', function (tabId) {
 })
 
 tasks.on('tab-updated', function (id, key) {
-  var updateKeys = ['title', 'secure', 'url', 'muted', 'hasAudio']
+  var updateKeys = ['title', 'secure', 'url', 'muted', 'hasAudio', 'favicon']
   if (updateKeys.includes(key)) {
     tabBar.updateTab(id)
   }

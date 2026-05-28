@@ -97,6 +97,32 @@ body.linux #menu-button {
   overflow-x: hidden;
 }
 
+.favicon {
+  display: none; /* Default state (not enbabled) */
+}
+
+#navbar.show-favicons .favicon {
+  display: revert;
+  width: 16px;
+  height: 16px;
+  margin: auto 0;
+  padding: 0;
+  font-size: 1.1em !important;
+  transition: filter 0.5s ease; /* change 0.5s to your desired duration */
+}
+
+.favicon.invert {
+  filter: invert(100%);
+}
+
+.favicon.too-bright {
+  filter: brightness(0.5);
+}
+
+.favicon.too-dark {
+  filter: brightness(4);
+}
+
 .tab-item {
   flex: 1;
   min-width: 125px;
