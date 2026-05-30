@@ -7,6 +7,7 @@ const tabAudio = require('tabAudio.js')
 const dragula = require('dragula')
 const settings = require('util/settings/settings.js')
 const urlParser = require('util/urlParser.js')
+const path = require('path')
 
 const tabEditor = require('navbar/tabEditor.js')
 const progressBar = require('navbar/progressBar.js')
@@ -57,13 +58,13 @@ const tabBar = {
     if (data.favicon) {
       var favicon = document.createElement('img')
       favicon.className = 'favicon'
-      if (data.favicon) {
-        favicon.src = data.favicon.url
-      } else {
-        favicon.src = data.favicon.url
-      }
-      
+      favicon.src = data.favicon.url    
       tabEl.appendChild(favicon)
+    } else {
+      var favicon = document.createElement('img')
+      favicon.className = 'favicon'
+      favicon.src = '../../icons/default-favicon.png'
+      tabEl.appendChild(favicon)      
     }
     tabEl.appendChild(progressBar.create())
 
