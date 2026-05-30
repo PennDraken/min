@@ -111,8 +111,8 @@ const tabBar = {
     tabEl.addEventListener('click', function (e) {
       if (tabs.getSelected() !== data.id) { // else switch to tab if it isn't focused
         tabBar.events.emit('tab-selected', data.id)
-      } else { // the tab is focused, edit tab instead
-        tabEditor.show(data.id)
+      } else { // the tab is focused, edit tab instead (ie this open search view)
+        // tabEditor.show(data.id)
       }
     })
 
@@ -280,6 +280,11 @@ const tabBar = {
     tabBar.dragulaInstance = dragula([document.getElementById('tabs-inner')], {
       direction: 'horizontal',
       slideFactorX: 25
+    })
+
+    tabBar.dragulaInstance.on('drag', function (el) {
+      const tabId = el.getAttribute('data-tab')
+      tabBar.events.emit('tab-selected', tabId)
     })
 
     tabBar.dragulaInstance.on('drop', function (el, target, source, sibling) {
