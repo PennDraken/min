@@ -98,6 +98,10 @@ body.linux #menu-button {
   text-overflow: ellipsis;
 }
 
+body.is-edit-mode #url-panel {
+  display: none;
+}
+
 #url-panel-text {
   width: 200px;
   background: var(--theme-foreground-color);
