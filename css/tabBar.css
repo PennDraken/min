@@ -88,9 +88,9 @@ body.linux #menu-button {
 
   padding: 0 10px;
 
-  background: var(--theme-background-color);
+  /* background: var(--theme-background-color); */
 
-  font-size: 14px;
+  font-size: 15px;
   line-height: normal;
 
   overflow: hidden;
@@ -104,12 +104,17 @@ body.is-edit-mode #url-panel {
 
 #url-panel-text {
   width: 200px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  cursor: text;
+
   background: var(--theme-foreground-color);
   color: var(--theme-background-color);
-  border-radius: 6px;
-  padding: 2px;
+  border-radius: 12px;
+  padding: 10px;
 }
-
 
 /* tab layout */
 

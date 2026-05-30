@@ -19,6 +19,7 @@ const tabBar = {
   container: document.getElementById('tabs'),
   containerInner: document.getElementById('tabs-inner'),
   urlPanel: document.getElementById('url-panel'),
+  urlPanelText: document.getElementById('url-panel-text'),
   tabElementMap: {}, // tabId: tab element
   events: new EventEmitter(),
   dragulaInstance: null,
@@ -114,6 +115,15 @@ const tabBar = {
         tabBar.events.emit('tab-selected', data.id)
       } else { // the tab is focused, edit tab instead (ie this opens search view)
         // tabEditor.show(data.id)
+      }
+
+      const selectedId = tabs.getSelected()
+      const selectedTab = tabs.get(selectedId)
+
+      if (selectedTab && selectedTab.url) {
+        document.getElementById("url-panel-text").innerText = selectedTab.url
+      } else {
+        document.getElementById("url-panel-text").innerText = ""
       }
     })
 
