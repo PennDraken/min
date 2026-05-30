@@ -18,6 +18,7 @@ const tabBar = {
   navBar: document.getElementById('navbar'),
   container: document.getElementById('tabs'),
   containerInner: document.getElementById('tabs-inner'),
+  urlPanel: document.getElementById('url-panel'),
   tabElementMap: {}, // tabId: tab element
   events: new EventEmitter(),
   dragulaInstance: null,
@@ -111,7 +112,7 @@ const tabBar = {
     tabEl.addEventListener('click', function (e) {
       if (tabs.getSelected() !== data.id) { // else switch to tab if it isn't focused
         tabBar.events.emit('tab-selected', data.id)
-      } else { // the tab is focused, edit tab instead (ie this open search view)
+      } else { // the tab is focused, edit tab instead (ie this opens search view)
         // tabEditor.show(data.id)
       }
     })
@@ -370,6 +371,12 @@ tabBar.container.addEventListener('drop', e => {
       private: tabs.get(tabs.getSelected()).private
     }), { enterEditMode: false, openInBackground: !settings.get('openTabsInForeground') })
   }
+})
+
+// Open search panel when user clicks on the url panel
+tabBar.urlPanel.addEventListener('click', e => {
+  // tabs.getSelected() !== data.id
+  tabEditor.show(tabs.getSelected())
 })
 
 module.exports = tabBar
